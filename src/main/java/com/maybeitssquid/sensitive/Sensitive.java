@@ -30,10 +30,20 @@ public class Sensitive<T> implements Formattable {
         this.sensitive = sensitive;
     }
 
+    /**
+     * Gets the default redactor for this data.
+     *
+     * @return a redactor that always returns an empty string.
+     */
     protected BiFunction<T, Integer, CharSequence> redactor() {
         return Redactor.empty();
     }
 
+    /**
+     * Gets the alternate redactor for this data, invoked by using a '#' in a format string.
+     *
+     * @return returns the {@link #redactor() default redactor}.
+     */
     protected BiFunction<T, Integer, CharSequence> alternate() {
         return redactor();
     }

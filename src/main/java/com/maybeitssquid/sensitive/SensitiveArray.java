@@ -10,6 +10,11 @@ import java.util.Arrays;
  */
 public class SensitiveArray<T> extends Sensitive<T[]> {
 
+    /**
+     * Creates a wrapper for a sensitive array.
+     *
+     * @param sensitive the array to protect.
+     */
     protected SensitiveArray(T[] sensitive) {
         super(sensitive);
     }
