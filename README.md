@@ -55,6 +55,8 @@ Note from the examples above that the "alternate" form has no effect on the outp
 
 # Implementation
 
+## Sensitive base class
+
 The `Sensitive` class holds the data in a final, protected, transient property with no predefined accessor methods.
 Accessors can be added to subclasses if desired. The property is transient to ensure it is not exposed via object
 serialization.
@@ -76,6 +78,24 @@ The `equals()` method provides the usual short-circuit checks for the argument b
 being the same class, then delegates to the equals method of the protected object.
 
 The `toString()` method delegates to the string formatter, using `String.format("%s", this)`.
+
+## Redactor interface
+
+The `Redactor` interface itself is a shorthand for the `BiFunction<T, Integer, CharSequence>` required by
+`Sensitive.redactor()` and `Sensitive.alternate()`. The interface additionally provides some predefined methods that
+can be composed and delegated.
+
+The `empty()` method always returns a function that returns an empty String.
+
+The `limited(…)` methods return functions that wrap another redactor and impose upper limits on the allowed precision.
+The variation that accepts a max ensures that the precision is always between 0 and the maximum value. The variation
+that accepts a function to compute the length of the non-redacted rendition ensures that the precision is always between
+0 and one half the length of the non-redacted rendition, rounded down.
+
+The `defaulted(…)` methods return functions that limit the default precision to one half the length of the non-redacted
+rendition, but do not interfere with explicitly provided precisions.
+
+The `mask(…)` methods return functions that replace all but *precision* characters with a predefined masking character.
 
 ## MaskedField
 

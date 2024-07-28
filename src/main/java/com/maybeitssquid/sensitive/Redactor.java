@@ -12,6 +12,11 @@ import java.util.function.Function;
 public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
 
     /**
+     * Commonly used masking character.
+     */
+    char DEFAULT_MASK = '#';
+
+    /**
      * Returns a redactor that always returns an empty string.
      *
      * @param <T> The type of sensitive data to be protected.
@@ -26,8 +31,8 @@ public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
      *
      * @param max   the maximum precision allowed.
      * @param after the redaction to wrap.
+     * @param <T>   The type of sensitive data to be protected.
      * @return function to apply a maximum precision.
-     * @param <T> The type of sensitive data to be protected.
      */
     static <T> Redactor<T> limited(final int max, final BiFunction<T, Integer, CharSequence> after) {
         return (t, p) -> {
@@ -41,13 +46,13 @@ public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
      *
      * @param length a function that computes the non-redacted length
      * @param after  the redaction to wrap.
+     * @param <T>    The type of sensitive data to be protected.
      * @return function to apply a maximum precision based on the input length.
-     * @param <T> The type of sensitive data to be protected.
      */
     static <T> Redactor<T> limited(final Function<T, Integer> length, final BiFunction<T, Integer, CharSequence> after) {
         return (t, p) -> {
             final int max = length.apply(t) / 2;
-            final int exposed = p == -1 ? max : Math.min(max, p);
+            final int exposed = p == -1 ? max : Math.min(p, max);
             return after.apply(t, exposed);
         };
     }
@@ -67,9 +72,9 @@ public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
      * allowed without a limit.
      *
      * @param length a function that computes the non-redacted length
-     * @param after the redaction to wrap.
+     * @param after  the redaction to wrap.
+     * @param <T>    The type of sensitive data to be protected.
      * @return function to apply a default number of characters redacted.
-     * @param <T> The type of sensitive data to be protected.
      */
     static <T> Redactor<T> defaulted(final Function<T, Integer> length, final BiFunction<T, Integer, CharSequence> after) {
         return (t, p) -> {
@@ -108,6 +113,16 @@ public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
                         t.subSequence(len - p, len);
             }
         };
+    }
+
+    /**
+     * Returns a function that replaces a number of characters from an input character sequence with
+     * {@link #DEFAULT_MASK}.
+     *
+     * @return function to mask the data.
+     */
+    static Redactor<CharSequence> mask() {
+        return mask(DEFAULT_MASK);
     }
 
 }

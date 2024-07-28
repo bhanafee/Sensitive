@@ -103,13 +103,25 @@ public class RedactorTest {
     }
 
     @Test
-    void testMask() {
+    void testMaskChar() {
         final Redactor<CharSequence> test = Redactor.mask('*');
 
         assertEquals("***", test.apply("abc", -1));
         assertEquals("***", test.apply("abc", 0));
         assertEquals("**c", test.apply("abc", 1));
         assertEquals("*bc", test.apply("abc", 2));
+        assertEquals("abc", test.apply("abc", 3));
+        assertEquals("abc", test.apply("abc", 4));
+    }
+
+    @Test
+    void testMask() {
+        final Redactor<CharSequence> test = Redactor.mask();
+
+        assertEquals("###", test.apply("abc", -1));
+        assertEquals("###", test.apply("abc", 0));
+        assertEquals("##c", test.apply("abc", 1));
+        assertEquals("#bc", test.apply("abc", 2));
         assertEquals("abc", test.apply("abc", 3));
         assertEquals("abc", test.apply("abc", 4));
     }

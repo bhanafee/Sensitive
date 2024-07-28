@@ -8,11 +8,6 @@ import java.util.function.BiFunction;
 @SuppressWarnings("unused")
 public class MaskedField extends Sensitive<CharSequence> {
 
-    /**
-     * Commonly used masking character.
-     */
-    public static final char DEFAULT_MASK = '#';
-
     private final BiFunction<CharSequence, Integer, CharSequence> masking;
 
     /**
@@ -27,12 +22,12 @@ public class MaskedField extends Sensitive<CharSequence> {
     }
 
     /**
-     * Creates a wrapper for a sensitive text field. Uses {@link #DEFAULT_MASK} to replace redacted characters.
+     * Creates a wrapper for a sensitive text field. Uses {@link Redactor#DEFAULT_MASK} to replace redacted characters.
      *
      * @param sensitive the sensitive text.
      */
     public MaskedField(final CharSequence sensitive) {
-        this(sensitive, DEFAULT_MASK);
+        this(sensitive, Redactor.DEFAULT_MASK);
     }
 
     @Override
