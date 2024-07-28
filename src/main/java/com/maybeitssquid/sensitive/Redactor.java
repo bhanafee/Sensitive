@@ -12,16 +12,6 @@ import java.util.function.Function;
 public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
 
     /**
-     * Commonly used masking character for {@link #mask(char)}.
-     */
-    char DEFAULT_MASK = '#';
-
-    /**
-     * Commonly used delimiting character for {@link SensitiveArray#delimit(char)}.
-     */
-    char DEFAULT_DELIMITER = '-';
-
-    /**
      * Returns a redactor that always returns an empty string.
      *
      * @param <T> The type of sensitive data to be protected.

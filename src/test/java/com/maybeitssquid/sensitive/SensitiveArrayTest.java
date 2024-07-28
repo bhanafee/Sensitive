@@ -20,7 +20,7 @@ public class SensitiveArrayTest {
 
     @Test
     void testHashCode() {
-        assertEquals(Arrays.hashCode(test), new SensitiveArray<Object>(test).hashCode());
+        assertEquals(Arrays.hashCode(test), new SensitiveArray<>(test).hashCode());
     }
 
     @SuppressWarnings("all")
@@ -51,6 +51,12 @@ public class SensitiveArrayTest {
     void testDelimitChar() {
         final Function<CharSequence[], CharSequence> test = SensitiveArray.delimit('+');
         assertEquals("a+b+cd", test.apply(new CharSequence[]{"a", "b", "cd"}));
+    }
+
+    @Test
+    void testDelimit() {
+        final Function<CharSequence[], CharSequence> test = SensitiveArray.delimit();
+        assertEquals("a-b-cd", test.apply(new CharSequence[]{"a", "b", "cd"}));
     }
 
     @Test

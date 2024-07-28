@@ -12,6 +12,11 @@ import java.util.function.Function;
 public class SensitiveArray<T> extends Sensitive<T[]> {
 
     /**
+     * Commonly used delimiting character.
+     */
+    public static final char DEFAULT_DELIMITER = '-';
+
+    /**
      * Creates a wrapper for a sensitive array.
      *
      * @param sensitive the array to protect.
@@ -47,6 +52,16 @@ public class SensitiveArray<T> extends Sensitive<T[]> {
      */
     public static Function<CharSequence[], CharSequence> delimit(final char delimiter) {
         return delimit(String.valueOf(delimiter));
+    }
+
+    /**
+     * Returns a function that converts an array of protected character sequences into a delimited character sequence
+     * using {@link #DEFAULT_DELIMITER}.
+     *
+     * @return function to generate the delimited data.
+     */
+    public static Function<CharSequence[], CharSequence> delimit() {
+        return delimit(String.valueOf(DEFAULT_DELIMITER));
     }
 
     /**
