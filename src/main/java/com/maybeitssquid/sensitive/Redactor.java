@@ -17,7 +17,7 @@ public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
     char DEFAULT_MASK = '#';
 
     /**
-     * Commonly used delimiting character for {@link #delimit(char)}.
+     * Commonly used delimiting character for {@link SensitiveArray#delimit(char)}.
      */
     char DEFAULT_DELIMITER = '-';
 
@@ -117,52 +117,6 @@ public interface Redactor<T> extends BiFunction<T, Integer, CharSequence> {
                 return Character.toString(masking).repeat(len - p) +
                         t.subSequence(len - p, len);
             }
-        };
-    }
-
-    /**
-     * Returns a function that converts an array of protected character sequences into a single character sequence.
-     *
-     * @return function to generate the concatenated data.
-     */
-    static Function<CharSequence[], CharSequence> concatenate() {
-        return (t) -> String.join("", t);
-    }
-
-    /**
-     * Returns a function that converts an array of protected character sequences into a delimited character sequence.
-     *
-     * @param delimiter delimiter between each element of the protected array.
-     * @return function to generate the delimited data.
-     */
-    static Function<CharSequence[], CharSequence> delimit(final CharSequence delimiter) {
-        return (t) -> String.join(delimiter, t);
-    }
-
-    /**
-     * Returns a function that converts an array of protected character sequences into a delimited character sequence.
-     *
-     * @param delimiter delimiter between each element of the protected array.
-     * @return function to generate the delimited data.
-     */
-    static Function<CharSequence[], CharSequence> delimit(final char delimiter) {
-        return delimit(String.valueOf(delimiter));
-    }
-
-    /**
-     * Returns a function that converts an array of protected elements into a delimited character sequence.
-     *
-     * @param delimiter delimiter between each element of the protected array.
-     * @param extractor function to convert each element into a {@code CharSequence}
-     * @param <T>       The type of sensitive data to be protected.
-     * @return function to generate the delimited data.
-     */
-    static <T> Function<T[], CharSequence> delimit(final CharSequence delimiter, final Function <T, CharSequence> extractor) {
-        return (t) -> {
-            final StringBuilder buffer = new StringBuilder();
-            buffer.append(t[0]);
-            for (int i = 1; i < t.length; i++) buffer.append(delimiter).append(t[i]);
-            return buffer.toString();
         };
     }
 

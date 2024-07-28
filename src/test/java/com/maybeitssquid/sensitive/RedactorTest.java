@@ -113,28 +113,4 @@ public class RedactorTest {
         assertEquals("abc", test.apply("abc", 3));
         assertEquals("abc", test.apply("abc", 4));
     }
-
-    @Test
-    void testConcatenate() {
-        final Function<CharSequence[], CharSequence> test = Redactor.concatenate();
-        assertEquals("abcd", test.apply(new CharSequence[]{"a", "b", "cd"}));
-    }
-
-    @Test
-    void testDelimitCharSequence() {
-        final Function<CharSequence[], CharSequence> test = Redactor.delimit("++");
-        assertEquals("a++b++cd", test.apply(new CharSequence[]{"a", "b", "cd"}));
-    }
-
-    @Test
-    void testDelimitChar() {
-        final Function<CharSequence[], CharSequence> test = Redactor.delimit('+');
-        assertEquals("a+b+cd", test.apply(new CharSequence[]{"a", "b", "cd"}));
-   }
-
-    @Test
-    void testDelimitFunction() {
-        final Function<Object[], CharSequence> test = Redactor.delimit("-", Object::toString);
-        assertEquals("a-b-cd", test.apply(new String[]{"a", "b", "cd"}));
-    }
 }
