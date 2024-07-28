@@ -55,7 +55,13 @@ public class SensitiveArrayTest {
 
     @Test
     void testDelimitFunction() {
-        final Function<Object[], CharSequence> test = SensitiveArray.delimit("-", Object::toString);
-        assertEquals("a-b-cd", test.apply(new String[]{"a", "b", "cd"}));
+        final Function<Object[], CharSequence> test1 = SensitiveArray.delimit("-", Object::toString);
+        assertEquals("a-b-cd", test1.apply(new String[]{"a", "b", "cd"}));
+
+        final Function<Integer[], CharSequence> test2 = SensitiveArray.delimit("-", Object::toString);
+        assertEquals("1-2-3", test2.apply(new Integer[]{1, 2, 3}));
+
+        final Function<Integer[], CharSequence> test3 = SensitiveArray.delimit("-", i -> "foo" + i);
+        assertEquals("foo1-foo2-foo3", test3.apply(new Integer[]{1, 2, 3}));
     }
 }

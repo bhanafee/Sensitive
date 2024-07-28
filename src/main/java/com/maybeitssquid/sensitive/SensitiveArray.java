@@ -60,8 +60,8 @@ public class SensitiveArray<T> extends Sensitive<T[]> {
     public static <T> Function<T[], CharSequence> delimit(final CharSequence delimiter, final Function<T, CharSequence> extractor) {
         return (t) -> {
             final StringBuilder buffer = new StringBuilder();
-            buffer.append(t[0]);
-            for (int i = 1; i < t.length; i++) buffer.append(delimiter).append(t[i]);
+            buffer.append(extractor.apply(t[0]));
+            for (int i = 1; i < t.length; i++) buffer.append(delimiter).append(extractor.apply(t[i]));
             return buffer.toString();
         };
     }
