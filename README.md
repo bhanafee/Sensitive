@@ -89,4 +89,10 @@ character other than `#` can be passed to the constructor.
 `SensitiveArray` extends `Sensitive` for cases where the protected data is an array. It overrides the `hashCode()` and
 `equals()` methods to use the corresponding functions provided by `java.util.Arrays`.
 
+`SensitiveArray` defines static utility methods for some common cases. For cases where `T` is a `CharSequence`, the
+`concatenate()`, `delimit(CharSequence)` and `delimit(char)` methods can be used to obtain functions that convert the
+array into a `CharSequence`.
+
+The `delimit(CharSequence, Function<T, CharSequence>)` method can be used to obtain a function to convert an array of
+an arbitrary type into a `CharSequence` by applying a conversation function to each element in the array.
 
