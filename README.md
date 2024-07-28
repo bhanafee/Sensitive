@@ -55,7 +55,7 @@ Note from the examples above that the "alternate" form has no effect on the outp
 
 # Implementation
 
-## Sensitive base class
+## `Sensitive` base class
 
 The `Sensitive` class holds the data in a final, protected, transient property with no predefined accessor methods.
 Accessors can be added to subclasses if desired. The property is transient to ensure it is not exposed via object
@@ -79,7 +79,7 @@ being the same class, then delegates to the equals method of the protected objec
 
 The `toString()` method delegates to the string formatter, using `String.format("%s", this)`.
 
-## Redactor interface
+## `Redactor` interface
 
 The `Redactor` interface itself is a shorthand for the `BiFunction<T, Integer, CharSequence>` required by
 `Sensitive.redactor()` and `Sensitive.alternate()`. The interface additionally provides some predefined methods that
@@ -96,15 +96,51 @@ The `defaulted(…)` methods return functions that limit the default precision t
 rendition, but do not interfere with explicitly provided precisions.
 
 The `mask(…)` methods return functions that replace all but *precision* characters with a predefined masking character.
+Redaction starts on the left, so the rightmost characters are exposed. If no precision is specified, the default is to
+mask the entire rendition. A masking character can be passed to the constructor. The parameterless convenience method
+`mask()` uses the default mask character, which is `#`.
 
-## MaskedField
+### Mask with hard limit
+
+Mask a sensitive string with '#', exposing no more than 4 plaintext characters:
+
+```Java
+@Override
+protected BiFunction<CharSequence, Integer, CharSequence> redactor() {
+ return Redactor.limited(4, Redactor.mask());
+}
+```
+
+### Always mask at least half
+
+Mask a sensitive string with '#', exposing no more than half the plaintext characters:
+
+```Java
+@Override
+protected BiFunction<CharSequence, Integer, CharSequence> redactor() {
+ return Redactor.limited(Redactor.mask());
+}
+```
+
+### Mask at least half by default
+
+Mask a sensitive string with '#' characters, respecting whatever precision is specified and exposing no more than half
+the characters in plaintext if no precision is specified:
+
+```Java
+@Override
+protected BiFunction<CharSequence, Integer, CharSequence> redactor() {
+  return Redactor.defaulted(Redactor.mask());
+}
+```
+
+## `MaskedField`
 
 `MaskedField` extends `Sensitive<CharSequence>` for the common case of protected string and string-like values. The
-redactor supplied by the `MaskedField` subclass replaces protected  characters with `#` up to the number of non-redacted
-characters specified by the precision. Redaction starts on the left, so the rightmost characters are exposed. A masking
-character other than `#` can be passed to the constructor.
+redactor supplied by the `MaskedField` subclass replaces protected characters with `#` up to the number of non-redacted
+characters specified by the precision.
 
-## SensitiveArray
+## `SensitiveArray`
 
 `SensitiveArray` extends `Sensitive` for cases where the protected data is an array. It overrides the `hashCode()` and
 `equals()` methods to use the corresponding functions provided by `java.util.Arrays`.
